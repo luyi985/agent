@@ -2,7 +2,8 @@
   "name": "agent",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
@@ -20,9 +21,12 @@
   },
   "homepage": "https://github.com/luyi985/agent#readme",
   "devDependencies": {
+    "@types/node": "^26.0.1",
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "dotenv": "^17.4.2"
+    "dotenv": "^17.4.2",
+    "dotenv-expand": "^13.0.0",
+    "openai": "^6.45.0"
   }
 }
