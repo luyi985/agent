@@ -1,51 +1,11 @@
 import { config } from 'dotenv';
 import { expand } from 'dotenv-expand';
 import { Agent, type Tool } from './agent.js';
+import { timeTool } from './tools/time.js';
+import { calculatorTool } from './tools/calculator.js';
 
 expand(config());
-
-// ---- Built-in Tools ----
-
-const timeTool: Tool = {
-  name: 'get_current_time',
-  description: 'Get the current date and time',
-  parameters: {
-    type: 'object',
-    properties: {},
-    required: [],
-  },
-  execute: async () => {
-    return new Date().toISOString();
-  },
-};
-
-const calculatorTool: Tool = {
-  name: 'calculator',
-  description: 'Evaluate a mathematical expression',
-  parameters: {
-    type: 'object',
-    properties: {
-      expression: {
-        type: 'string',
-        description: 'The mathematical expression to evaluate, e.g. "2 + 2" or "sqrt(16)"',
-      },
-    },
-    required: ['expression'],
-  },
-  execute: async (args) => {
-    const expression = args.expression as string;
-    try {
-      // Safe evaluation using Function constructor (basic math only)
-      const result = new Function(`return (${expression})`)();
-      return String(result);
-    } catch {
-      return `Error: invalid expression "${expression}"`;
-    }
-  },
-};
-
 // ---- Main ----
-
 async function main() {
   const baseURL = process.env.OPENAI_BASE_URL;
   const apiKey = process.env.OPENAI_API_KEY;
