@@ -21,8 +21,12 @@ class AbstractDB(ABC):
         """Open the database connection."""
 
     @abstractmethod
-    def execute(self, query: str, parameters: Parameters = None) -> None:
-        """Execute an INSERT, UPDATE, DELETE, or DDL statement."""
+    def execute(
+        self,
+        query: str,
+        parameters: Parameters = None,
+    ) -> int | None:
+        """Execute a statement and return its generated row ID, if any."""
 
     @abstractmethod
     def fetch_one(

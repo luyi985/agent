@@ -1,22 +1,21 @@
+
+from user.user import User
 from db.sqlite_db import SQLiteDB
 
 
 def test_sqlite_db():
-    db = SQLiteDB("./data.db")
-    with db as conn:
-        conn.execute(
-            "CREATE TABLE users (id INTEGER, name TEXT)"
-        )
+    db = SQLiteDB("./data/data.db")
+    user = User(db)
+    user.init_db()
+    u = user.get_user(1)
+    print(u)
+    # user_id = user.create_user(
+    #     username="Yi",
+    #     email="yi@example.com",
+    #     password_hash="123",
+    #     display_name="YiLu",
+    # )
+    # print(user_id)
 
-        conn.execute(
-            "INSERT INTO users VALUES (?, ?)",
-            (1, "Alice"),
-        )
-
-        user = conn.fetch_one(
-            "SELECT * FROM users WHERE id = ?",
-            (1,),
-        )
-        print(user)
 
 test_sqlite_db()

@@ -7,7 +7,7 @@ from db.abs_db import AbstractDB, Parameters
 
 class SQLiteDB(AbstractDB):
     def __init__(self, database_path: str):
-        self.database_path = database_path
+        self.database_path: str = database_path
         self.connection: sqlite3.Connection | None = None
 
     def connect(self) -> None:
@@ -18,15 +18,18 @@ class SQLiteDB(AbstractDB):
         self,
         query: str,
         parameters: Parameters = None,
-    ) -> None:
+    ) -> int | None:
         if self.connection is None:
             raise RuntimeError("Database is not connected")
 
-        self.connection.execute(
+        cursor = self.connection.execute(
             query,
             parameters if parameters is not None else (),
         )
         self.connection.commit()
+        row_id = cursor.lastrowid
+        cursor.close()
+        return row_id
 
     def fetch_one(
         self,
