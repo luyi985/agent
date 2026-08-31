@@ -5,7 +5,7 @@ from typing import cast
 from db.abs_db import AbstractDB, Parameters
 
 
-class SQLiteDB(AbstractDB):
+class SQLiteDB(AbstractDB[Mapping[str, object]]):
     def __init__(self, database_path: str):
         self.database_path: str = database_path
         self.connection: sqlite3.Connection | None = None

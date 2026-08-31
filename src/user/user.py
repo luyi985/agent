@@ -53,3 +53,12 @@ class User:
                 """,
                 (user_id,),
             )
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        with self.db as db:
+            db.execute(
+                """
+                UPDATE users SET {} WHERE id = ?
+                """.format(", ".join(f"{k} = ?" for k in kwargs)),
+                (*kwargs.values(), user_id),
+            )

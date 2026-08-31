@@ -7,13 +7,14 @@ without making the rest of the application depend on a particular driver.
 from abc import ABC, abstractmethod
 from collections.abc import Mapping, Sequence
 from types import TracebackType
-from typing import Self
+from typing import Generic, Self, TypeVar
 
 
 Parameters = Sequence[object] | Mapping[str, object] | None
+RowT = TypeVar("RowT")
 
 
-class AbstractDB(ABC):
+class AbstractDB(Generic[RowT], ABC):
     """Minimal synchronous database interface."""
 
     @abstractmethod
@@ -31,13 +32,13 @@ class AbstractDB(ABC):
     @abstractmethod
     def fetch_one(
         self, query: str, parameters: Parameters = None
-    ) -> Mapping[str, object] | None:
+    ) -> RowT | None:
         """Return the first matching row, or ``None``."""
 
     @abstractmethod
     def fetch_all(
         self, query: str, parameters: Parameters = None
-    ) -> list[Mapping[str, object]]:
+    ) -> list[RowT]:
         """Return all matching rows."""
 
     @abstractmethod
