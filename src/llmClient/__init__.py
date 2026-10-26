@@ -1,3 +1,3 @@
-from .client import model    
+from .client import get_model    
 
-__all__ = ["model"]
+__all__ = ["get_model"]
