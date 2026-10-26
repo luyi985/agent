@@ -24,6 +24,16 @@ prompt = ChatPromptTemplate.from_messages([
 
 # prompt.append(("human", "{message}"))
 structured_model = model.with_structured_output(TravelRequest)
+## --------------------
+def structured_model_separately(message: str):
+    prompt_value = prompt.invoke({"message": message})
+    print("提示词类型：", type(prompt_value))
+
+    output = structured_model.invoke(prompt_value)
+    print("结果类型：", type(output))
+    return output
+
+##----------------------
 
 # request = structured_model.invoke(
 #     prompt.invoke({
@@ -40,7 +50,7 @@ structured_output = prompt| structured_model
 # print(output)
 ##-------------------------------
 
-def validate_days(output):
+def validate_days(output)-> list[str]:
     issues= []
     if output.days is None:
         issues.append("追问：你准备玩几天？")
@@ -50,17 +60,18 @@ def validate_days(output):
 
 
 messages = [
-    # "我想去悉尼玩，带两个孩子",
-    # "我想去悉尼玩三天，带两个孩子，喜欢海滩。",
-    # "我想去悉尼玩，带两个孩子，喜欢海滩。",
+    "我想去悉尼玩，带两个孩子",
+    "我想去悉尼玩三天，带两个孩子，喜欢海滩。",
+    "我想去悉尼玩，带两个孩子，喜欢海滩。",
     "我想去悉尼玩零天，带两个孩子，喜欢海滩。",
     "我想去悉尼玩几天，带两个孩子，喜欢海滩。"
 ]
 for message in messages:
-    output = structured_output.invoke({
-        "message": message
-    })
+    # output = structured_output.invoke({
+    #     "message": message
+    # })
     #print("输入：", message)
+    output = structured_model_separately(message)
     issues = validate_days(output)
 
     if issues:
