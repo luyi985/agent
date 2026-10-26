@@ -22,14 +22,27 @@ def chat(session_id: str, message: str):
     print(f"\n会话 {session_id} 本次发送的历史：")
     for msg in history:
         print(f"{msg.type}: {msg.content}")
+    # ------------ Normal Outputs----------------------
+    # response = model.invoke(history)
+    # history.append(response)
 
-    response = model.invoke(history)
-    history.append(response)
+    # print("本次回答：", response.content)
+    # ------------ Stream Outputs----------------------
+    print("本次回答：", end="", flush=True)
+    full_response = None
 
-    print("本次回答：", response.content)
+    for chunk in model.stream(history):
+        print(chunk.content, end="", flush=True)
+        full_response = (
+            chunk if full_response is None
+        else full_response + chunk
+        )
+    history.append(full_response)   
+    print()
     print("------------")
 
+
 chat("A", "我计划去悉尼玩三天。")
-chat("B", "我计划去墨尔本玩五天。")
+#chat("B", "我计划去墨尔本玩五天。")
 chat("A", "我刚才说去哪里，玩几天？")
-chat("B", "我刚才说去哪里，玩几天？")
+#chat("B", "我刚才说去哪里，玩几天？")
