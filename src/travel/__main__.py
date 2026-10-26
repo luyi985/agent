@@ -64,21 +64,44 @@ messages = [
     "我想去悉尼玩三天，带两个孩子，喜欢海滩。",
     "我想去悉尼玩，带两个孩子，喜欢海滩。",
     "我想去悉尼玩零天，带两个孩子，喜欢海滩。",
-    "我想去悉尼玩几天，带两个孩子，喜欢海滩。"
+    "我想去悉尼玩几天，带两个孩子，喜欢海滩。",
+    ""
 ]
-for message in messages:
-    # output = structured_output.invoke({
-    #     "message": message
-    # })
-    #print("输入：", message)
-    output = structured_model_separately(message)
-    issues = validate_days(output)
+# for message in messages:
+#     # output = structured_output.invoke({
+#     #     "message": message
+#     # })
+#     #print("输入：", message)
+#     output = structured_model_separately(message)
+#     issues = validate_days(output)
 
-    if issues:
-        for issue in issues:
-            print(issue)
+#     if issues:
+#         for issue in issues:
+#             print(issue)
+#     else:
+#         print("没有发现问题。")
+#         print("结果：", output.model_dump())
+#     print('------------')
+
+# --------Batch process-----------------------
+# inputs = [prompt.invoke({"message": message}) for message in messages]
+# inputs = [{"message": message} for message in messages]
+inputs= [{}, {"message": "我想去悉尼玩三天，带两个孩子，喜欢海滩。"},]
+outputs = structured_output.batch(inputs, config={"max_concurrency":3},return_exceptions=True,)
+
+for input_data, output in zip(inputs, outputs):
+    print("输入：", input_data)
+
+    if isinstance(output, Exception):
+        print("调用或解析失败：", output)
     else:
-        print("没有发现问题。")
-        print("结果：", output.model_dump())
-    print('------------')
+        print("提取结果：", output.model_dump())
+        issues = validate_days(output)
 
+        if issues:
+            for issue in issues:
+                print(issue)
+        else:
+            print("没有发现问题。")
+
+    print("------------")
