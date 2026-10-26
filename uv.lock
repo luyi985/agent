@@ -8,6 +8,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "langchain" },
+    { name = "langchain-core" },
     { name = "langchain-openai" },
     { name = "python-dotenv" },
 ]
@@ -15,6 +16,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "langchain", specifier = ">=1.4.7" },
+    { name = "langchain-core", specifier = ">=1.7.0" },
     { name = "langchain-openai", specifier = ">=1.7.2" },
     { name = "python-dotenv", specifier = ">=1.2.3" },
 ]
